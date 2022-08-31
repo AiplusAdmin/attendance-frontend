@@ -1465,7 +1465,7 @@ export default {
     srez: function(val) {
       if (val) {
         this.groupStudents.map(function(student) {
-          student.test = 32;
+          student.test = 102;
         });
       } else {
         this.groupStudents.map(function(student) {
