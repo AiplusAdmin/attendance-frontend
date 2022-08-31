@@ -178,31 +178,6 @@
                   </v-list-item-content>
                 </v-col>
               </v-list-item>
-              <v-list-item inactive>
-                <v-col cols="9" class="pa-0">
-                  <v-list-item-content>
-                    <v-list-item-title
-                      class="font-weight-bold grey--text text--darken-2"
-                      >Кабинет</v-list-item-title
-                    >
-                  </v-list-item-content>
-                </v-col>
-                <v-col cols="3" class="pa-0">
-                  <v-list-item-content>
-                    <v-select
-                      v-model="extraparams.room"
-                      :items="groupRooms"
-                      item-text="Room"
-                      color="#fbab17"
-                      return-object
-                      flat
-                      dense
-                      hide-details
-                    >
-                    </v-select>
-                  </v-list-item-content>
-                </v-col>
-              </v-list-item>
               <v-list-item
                 inactive
                 v-if="currentGroup.symbol == 'E' || currentGroup.symbol == 'M'"
@@ -482,24 +457,24 @@
                   requiredNumber('воскрес', item.attendence && foskres),
                   numberBetween('воскрес', item.attendence && foskres),
                 ]"
-                required
-              >
+                required>
               </v-text-field>
             </template>
             <template v-slot:[`item.test`]="{ item }">
-              <v-select
-                v-show="item.attendence"
+              <v-text-field
                 v-model="item.test"
-                :disabled="!item.attendence"
-                :items="tests"
-                item-text="text"
-                item-value="value"
-                item-color="#fbab17"
+                type="number"
+                min="0"
+                max="102"
                 color="#fbab17"
-                :rules="[requiredNumber('Срез', item.attendence)]"
+                item-color="#fbab17"
+                :rules="[
+                  requiredNumber('Активность', item.attendence),
+                  numberBetween('Активность', parseInt(srezMaxDefault)),
+                ]"
                 required
               >
-              </v-select>
+              </v-text-field>
             </template>
             <template v-slot:[`item.lesson`]="{ item }">
               <v-text-field
@@ -822,7 +797,7 @@
                           v-model="student.test"
                           type="number"
                           min="0"
-                          max="100"
+                          max="102"
                           color="#fbab17"
                           item-color="#fbab17"
                           :rules="[
@@ -1198,7 +1173,6 @@ export default {
   async mounted() {
     this.onResize();
     this.$store.dispatch("SetLevels");
-    this.GetOfficeRooms(this.currentGroup);
 
     if (this.currentGroup.klass == 6) {
       if (this.currentGroup.subject == "Математика") {
@@ -1263,13 +1237,6 @@ export default {
       if (response.status == 200) {
         this.SortStudent();
         this.isLoading = false;
-        var res = await this.$store.dispatch("GetLastLessonRoom", {
-          groupId: this.currentGroup.Id,
-        });
-        if (res.status == 200) {
-          this.extraparams.room = res.data.room;
-          this.extraparams.level = res.data.level;
-        }
       } else if (response.status == 400 || response.status == 401) {
         this.messageModal = "Ваше время в системе истекло перезайдите";
         this.path = "/";
@@ -1467,6 +1434,7 @@ export default {
         this.groupStudents.map(function(student) {
           student.test = 102;
         });
+        this.srezMaxDefault = null;
       } else {
         this.groupStudents.map(function(student) {
           student.test = null;

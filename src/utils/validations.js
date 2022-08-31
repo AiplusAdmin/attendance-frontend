@@ -30,7 +30,7 @@ var emailFormat = () => {
 
 var numberBetween = (propertyType, ok) => {
 	if(!ok) return true;
-	return  v => v && v >= 0 && v <= 100 || `${propertyType} должна быть между 0 и 100`;
+	return  v => v && v >= 0 && v <= 102 || `${propertyType} должна быть между 0 и 100`;
 }
 
 var numberBetweenTest = (propertyType,ok, max) => {
