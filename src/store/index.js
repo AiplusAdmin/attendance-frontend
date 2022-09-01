@@ -63,8 +63,48 @@ export default new Vuex.Store({
 				value: 10
 			},
 			{
-				text:'Не задавали',
+				text: '11',
 				value: 11
+			},
+			{
+				text: '12',
+				value: 12
+			},
+			{
+				text: '13',
+				value: 13
+			},
+			{
+				text: '14',
+				value: 14
+			},
+			{
+				text: '15',
+				value: 15
+			},
+			{
+				text: '16',
+				value: 16
+			},
+			{
+				text: '17',
+				value: 17
+			},
+			{
+				text: '18',
+				value: 18
+			},
+			{
+				text: '19',
+				value: 19
+			},
+			{
+				text: '20',
+				value: 20
+			},
+			{
+				text:'Не задавали',
+				value: 21
 			}
 		],
 	comments:[
