@@ -180,7 +180,7 @@
               </v-list-item>
               <v-list-item
                 inactive
-                v-if="currentGroup.symbol == 'E' || currentGroup.symbol == 'M'"
+                v-if="currentGroup.symbol == 'E' || currentGroup.symbol == 'M' || currentGroup.symbol == 'L' || currentGroup.symbol == 'R' || currentGroup.symbol == 'K'"
               >
                 <v-col cols="9" class="pa-0">
                   <v-list-item-content>
@@ -1095,7 +1095,7 @@ export default {
       block: "",
       blocks: [],
       testMax: 50,
-      srezMax: ["20","30","40","50","60","70","80","90","100"],
+      srezMax: ["10","20","30","40","50","60","70","80","90","100"],
       srezMaxDefault : null
     };
   },
@@ -1188,7 +1188,9 @@ export default {
         this.blocks = ["1", "2", "3", "4"];
          this.testMax = 20;
       } else if (this.currentGroup.subject == "Логика") {
-        this.block = "6";
+        this.block = "6.1";
+        this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
+        this.testMax = 30;
       }
     }else if (this.currentGroup.klass == 5) {
       if (this.currentGroup.subject == "Математика") {
