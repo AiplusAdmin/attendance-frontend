@@ -258,8 +258,6 @@
                         dense
                         v-bind="attrs"
                         v-on="on"
-                        required
-                        :rules="[required('Тема')]"
                       ></v-text-field>
                     </template>
                     <v-card class="mx-auto" max-width="300" tile>
@@ -307,8 +305,6 @@
                       flat
                       dense
                       hide-details
-                      :rules="[requiredObject('Тема')]"
-                      required
                     >
                     </v-select>
                   </v-list-item-content>
