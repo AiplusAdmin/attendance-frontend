@@ -1182,7 +1182,7 @@ export default {
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 20;
+         this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
@@ -1200,7 +1200,7 @@ export default {
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 20;
+         this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "5";
       }
@@ -1216,7 +1216,7 @@ export default {
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 20;
+         this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "4";
       }
