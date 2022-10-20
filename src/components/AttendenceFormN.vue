@@ -337,7 +337,7 @@
                 v-show="item.attendence"
                 v-model="item.test"
                 :disabled="!item.attendence"
-                :items="tests"
+                :items="testsN"
                 item-text="text"
                 item-value="value"
                 item-color="#fbab17"
@@ -1005,6 +1005,9 @@ export default {
     },
     tests() {
       return this.$store.state.tests;
+    },
+    testsN() {
+      return this.$store.state.testsN;
     },
     groupStudents() {
       var teacher =
