@@ -274,7 +274,7 @@ export default {
                 this.$router.push({ path: "/groupn" });
               } else if (
                 this.$store.state.currentGroup.klass >= 4 &&
-                this.$store.state.currentGroup.klass <= 5
+                this.$store.state.currentGroup.klass <= 6
               ) {
                 this.$router.push({ path: "/groupt" });
               } else {
