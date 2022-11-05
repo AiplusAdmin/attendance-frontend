@@ -409,16 +409,14 @@
             </template>
             <template v-slot:[`item.homework`]="{ item }">
               <v-select
-                v-show="item.attendence"
                 v-model="item.homework"
-                :disabled="!item.attendence"
                 :items="homeworks"
                 item-text="text"
                 item-value="value"
                 color="#fbab17"
                 hide-selected
                 item-color="#fbab17"
-                :rules="[requiredNumber('Д/з', item.attendence)]"
+                :rules="[requiredNumber('Д/з', true)]"
                 required
               >
               </v-select>
@@ -465,8 +463,8 @@
                 color="#fbab17"
                 item-color="#fbab17"
                 :rules="[
-                  requiredNumber('Активность', item.attendence),
-                  numberBetween('Активность', parseInt(srezMaxDefault)),
+                  requiredNumber('Срез', true),
+                  numberBetween('Срез', true),
                 ]"
                 required
               >
@@ -740,7 +738,7 @@
                   </v-row>
                 </v-list-item>
                 <v-list-item
-                  v-show="student.attendence"
+                  v-show="!student.delete"
                   :key="`homework-${student.clientid}`"
                   :value="student.homework"
                   class="pr-0"
@@ -764,7 +762,7 @@
                           color="#fbab17"
                           item-color="#fbab17"
                           hide-selected
-                          :rules="[requiredNumber('Д/з', student.attendence)]"
+                          :rules="[requiredNumber('Д/з', !student.delete)]"
                           required
                         >
                         </v-select>
@@ -773,7 +771,7 @@
                   </v-row>
                 </v-list-item>
                 <v-list-item
-                  v-show="student.attendence && !srez"
+                  v-show="!student.delete"
                   :key="`test-${student.clientid}`"
                   :value="student.test"
                   class="pr-0"
@@ -797,8 +795,8 @@
                           color="#fbab17"
                           item-color="#fbab17"
                           :rules="[
-                            requiredNumber('Активность', student.attendence),
-                            numberBetween('Активность', parseInt(srezMaxDefault)),
+                            requiredNumber('Срез', !student.delete),
+                            numberBetween('Срез', !student.delete),
                           ]"
                           required
                         >
@@ -858,32 +856,7 @@
                         >
                       </v-list-item-content>
                     </v-col>
-                    <v-col
-                      cols="5"
-                      class="pa-0"
-                      v-if="
-                        currentGroup.klass == '0' ||
-                          currentGroup.klass == '1' ||
-                          currentGroup.klass == '2' ||
-                          currentGroup.klass == '3'
-                      "
-                    >
-                      <v-list-item-action>
-                        <v-select
-                          v-model="student.comment"
-                          :items="commentsN"
-                          item-text="value"
-                          item-value="text"
-                          color="#fbab17"
-                          item-color="#fbab17"
-                          clearable
-                          placeholder="Комментарии"
-                          multiple
-                        >
-                        </v-select>
-                      </v-list-item-action>
-                    </v-col>
-                    <v-col v-else cols="5" class="pa-0">
+                    <v-col cols="5" class="pa-0">
                       <v-list-item-action>
                         <v-select
                           v-model="student.comment"
@@ -1203,6 +1176,7 @@ export default {
          this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "5";
+        this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
       }
     } else if (this.currentGroup.klass == 4) {
       if (this.currentGroup.subject == "Математика") {
@@ -1218,7 +1192,8 @@ export default {
         this.blocks = ["1", "2", "3", "4"];
          this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
-        this.block = "4";
+        this.block = "4.2";
+        this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
       }
     }
     this.SelectBlock();
@@ -1272,15 +1247,18 @@ export default {
         this.$refs.form.validate();
         this.ScrollToError(this.$refs.form.errorBag);
       } else {
-        
             var total = 0;
+            var maxSrez = this.srezMaxDefault;
+            console.log(maxSrez);
             this.groupStudents.map(function(student) {
-              if (student.attendence) {
+              if (!student.delete) {
                 if (student.aibaks == 0) {
-                  if (student.homework >= 5 && student.homework <= 10)
-                    student.aibaks += 1;
-                  if (student.lesson > 50 && student.lesson <= 100)
-                    student.aibaks += 1;
+                  if(maxSrez && parseInt(maxSrez) > 0)
+                    student.aibaks += parseInt(Number((parseInt(student.test)/parseInt(maxSrez))*30).toFixed(0));
+                  if (parseInt(student.homework) <= 20)
+                    student.aibaks += parseInt(Number((parseInt(student.homework)/20)*10).toFixed(0));
+                  if (parseInt(student.lesson) > 0)
+                    student.aibaks += parseInt(Number((parseInt(student.lesson)/100)*10).toFixed(0));
                 }
                 total += student.aibaks;
               }

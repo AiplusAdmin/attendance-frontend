@@ -1001,6 +1001,7 @@ export default new Vuex.Store({
 	async SetAttendenceT({commit}, params){
 		try{
 			var response = await Api().post('/registeramount',{groupId:params.group.Id,lessonDate: params.group.date,officeId:params.group.officeId,time: params.group.time,teacherId: params.group.teacherId});
+			
 			if(response.data.status == 200){		
 				var today = new Date();
 				var day = today.getFullYear()+'-'+("0" + (today.getMonth()+1)).slice(-2)+'-'+("0" + today.getDate()).slice(-2);
