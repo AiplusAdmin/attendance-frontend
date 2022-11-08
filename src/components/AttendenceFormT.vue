@@ -1253,7 +1253,7 @@ export default {
             this.groupStudents.map(function(student) {
               if (!student.delete) {
                 if (student.aibaks == 0) {
-                  if(maxSrez && parseInt(maxSrez) > 0)
+                  if(maxSrez && parseInt(maxSrez) > 0 && student.test <= 100)
                     student.aibaks += parseInt(Number((parseInt(student.test)/parseInt(maxSrez))*30).toFixed(0));
                   if (parseInt(student.homework) <= 20)
                     student.aibaks += parseInt(Number((parseInt(student.homework)/20)*10).toFixed(0));
