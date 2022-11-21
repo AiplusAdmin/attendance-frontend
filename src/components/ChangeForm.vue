@@ -266,7 +266,6 @@ export default {
               this.dialog = true;
             } else if (result.status == 200) {
               this.click = false;
-              console.log(this.$store.state.currentGroup);
               if (
                 this.$store.state.currentGroup.klass >= 0 &&
                 this.$store.state.currentGroup.klass <= 3

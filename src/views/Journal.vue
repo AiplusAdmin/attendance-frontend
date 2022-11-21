@@ -54,13 +54,6 @@ export default {
 	},
 	mounted() {
 		this.onResize();
-		var user = window.localStorage.currentUser?JSON.parse(window.localStorage.currentUser):{};
-		
-		if (user == undefined || (Object.keys(user).length === 0 && user.constructor === Object)) {
-			this.$router.push({path:'/'});
-		} else {
-			this.$store.state.currentUser = user;
-		}
 
 		this.$nextTick(() => {			
 			$("document").ready(function(){

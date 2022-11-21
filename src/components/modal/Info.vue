@@ -37,10 +37,7 @@ export default {
 	methods:{
 		CloseModal(){
 			this.$parent.$parent.dialog = false;
-			this.dialog = !this.dialog;
-			if(this.path)
-				this.$router.push(this.path);
-			
+			this.$router.push(this.path);
 		}
 	}
 }

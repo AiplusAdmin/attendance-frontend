@@ -410,13 +410,14 @@
             <template v-slot:[`item.homework`]="{ item }">
               <v-select
                 v-model="item.homework"
+                v-show="!item.delete"
                 :items="homeworks"
                 item-text="text"
                 item-value="value"
                 color="#fbab17"
                 hide-selected
                 item-color="#fbab17"
-                :rules="[requiredNumber('Д/з', true)]"
+                :rules="[requiredNumber('Д/з', !item.delete)]"
                 required
               >
               </v-select>
@@ -424,15 +425,15 @@
             <template v-slot:[`item.kolhar`]="{ item }">
               <v-text-field
                 v-model="item.kolhar"
-                v-show="item.attendence && kolhar"
+                v-show="item.attendence && kolhar && !item.delete"
                 type="number"
                 :disabled="!item.attendence"
                 min="0"
                 max="100"
                 color="#fbab17"
                 :rules="[
-                  requiredNumber('Кол. хар', item.attendence && kolhar),
-                  numberBetween('кол. хар', item.attendence && kolhar),
+                  requiredNumber('Кол. хар', item.attendence && kolhar && !item.delete),
+                  numberBetween('кол. хар', item.attendence && kolhar && !item.delete),
                 ]"
                 required
               >
@@ -441,15 +442,15 @@
             <template v-slot:[`item.foskres`]="{ item }">
               <v-text-field
                 v-model="item.foskres"
-                v-show="item.attendence && foskres"
+                v-show="item.attendence && foskres && !item.delete"
                 type="number"
                 :disabled="!item.attendence"
                 min="0"
                 max="100"
                 color="#fbab17"
                 :rules="[
-                  requiredNumber('воскрес', item.attendence && foskres),
-                  numberBetween('воскрес', item.attendence && foskres),
+                  requiredNumber('воскрес', item.attendence && foskres && !item.delete),
+                  numberBetween('воскрес', item.attendence && foskres && !item.delete),
                 ]"
                 required>
               </v-text-field>
@@ -457,14 +458,15 @@
             <template v-slot:[`item.test`]="{ item }">
               <v-text-field
                 v-model="item.test"
+                v-show="!item.delete"
                 type="number"
                 min="0"
                 max="102"
                 color="#fbab17"
                 item-color="#fbab17"
                 :rules="[
-                  requiredNumber('Срез', true),
-                  numberBetween('Срез', true),
+                  requiredNumber('Срез', !item.delete),
+                  numberBetween('Срез', !item.delete),
                 ]"
                 required
               >
@@ -495,12 +497,18 @@
                 item-text="value"
                 item-value="text"
                 color="#fbab17"
-                :disabled="!item.attendence"
+                :disabled="!item.attendence && !item.delete"
                 item-color="#fbab17"
                 label="Комментарии"
                 multiple
               >
               </v-select>
+            </template>
+            <template v-slot:[`item.loyalty`]="{ item }">
+              <v-icon
+                @click="RemoveStudent(groupStudents.indexOf(item))"
+                :color="item.loyalty != undefined ? '#ffffff' : '#fbab17'"
+              >{{ item.icon }}</v-icon>
             </template>
           </v-data-table>
         </v-col>
@@ -697,42 +705,39 @@
                   </v-row>
                 </v-list-item>
                 <v-list-item
-                  v-show="student.attendence && foskres"
+                  v-show="foskres"
                   :key="`foskres-${student.clientid}`"
                   :value="student.homework"
                   class="pr-0"
                   inactive
                 >
                   <v-row class="align-center">
-                    <v-col cols="9" class="py-0">
+                    <v-col cols="7" class="py-0">
                       <v-list-item-content>
                         <v-list-item-title class="grey--text text--darken-3"
                           >Блочный тест</v-list-item-title
                         >
                       </v-list-item-content>
                     </v-col>
-                    <v-col cols="3" class="pa-0">
-                      <v-list-item-action class="mr-2">
-                        <v-text-field
+                    <v-col cols="5" class="pa-0">
+                      <v-list-item-action class="mr-7">
+                        <v-select
                           v-model="student.foskres"
-                          type="number"
-                          min="0"
-                          max="100"
+                          :items="blockTests"
+                          item-text="text"
+                          item-value="value"
                           color="#fbab17"
                           item-color="#fbab17"
+                          hide-selected
                           :rules="[
                             requiredNumber(
-                              'Воскрес. тест',
+                              'Блочный тест',
                               student.attendence && foskres
-                            ),
-                            numberBetweenTest(
-                              'Воскрес. тест', student.attendence && foskres,
-                              testMax
                             ),
                           ]"
                           required
                         >
-                        </v-text-field>
+                        </v-select>
                       </v-list-item-action>
                     </v-col>
                   </v-row>
@@ -1032,6 +1037,11 @@ export default {
           value: "comment",
           sortable: false,
         },
+        {
+          text: "Удалить",
+          value: "loyalty",
+          sortable: false,
+        }
       ],
       extraparams: {
         room: null,
@@ -1065,7 +1075,8 @@ export default {
       blocks: [],
       testMax: 50,
       srezMax: ["10","20","30","40","50","60","70","80","90","100"],
-      srezMaxDefault : null
+      srezMaxDefault : null,
+      blockTests: [],
     };
   },
   computed: {
@@ -1147,7 +1158,7 @@ export default {
       if (this.currentGroup.subject == "Математика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 40;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "5";
       } else if (this.currentGroup.subject == "Русский язык") {
@@ -1159,7 +1170,7 @@ export default {
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 40;
       }
     }else if (this.currentGroup.klass == 5) {
       if (this.currentGroup.subject == "Математика") {
@@ -1249,7 +1260,6 @@ export default {
       } else {
             var total = 0;
             var maxSrez = this.srezMaxDefault;
-            console.log(maxSrez);
             this.groupStudents.map(function(student) {
               if (!student.delete) {
                 if (student.aibaks == 0) {
@@ -1283,6 +1293,7 @@ export default {
               kolhar: this.kolhar,
               srezMaxDefault: this.srezMaxDefault
             });
+            console.log(response);
             this.overlay = false;
             if (response.status == 200) {
               this.messageModal = `Успешно добавлен.\n Количество Айбаксов - ${total}.\nПроверьте ЖУРНАЛ пожалуйста`;
@@ -1383,6 +1394,31 @@ export default {
     SelectBlock() {
       this.topic = null;
       this.topicName = null;
+
+      if (this.currentGroup.subject == "Математика") {
+        if (this.block == "6.1" || this.block == "6.2") {
+          this.testMax = 41;
+        }
+      } else if (this.currentGroup.subject == "Логика") {
+        if (this.block == "6.2" || this.block == "6.1") {
+          this.testMax = 61;
+        }
+      }
+
+      for (var i = 0; i <= this.testMax; i++) {
+        if (i == this.testMax) {
+          this.blockTests.push({
+            text: "Не писал",
+            value: i,
+          });
+        } else {
+          this.blockTests.push({
+            text: "" + i,
+            value: i,
+          });
+        }
+      }
+
       this.$store.dispatch("GetTopics", {
         klass: this.block,
         branch: this.currentGroup.branch,

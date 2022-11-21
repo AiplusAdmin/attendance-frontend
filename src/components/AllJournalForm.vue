@@ -404,6 +404,12 @@ export default {
           sortable: false,
           divider: true,
         },
+        {
+          text: "Айбаксы",
+          value: "Aibucks",
+          sortable: false,
+          divider: true,
+        },
       ],
       search: "",
       expanded: [],
