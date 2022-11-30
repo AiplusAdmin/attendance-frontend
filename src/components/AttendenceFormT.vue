@@ -1160,13 +1160,17 @@ export default {
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
         this.testMax = 40;
       } else if (this.currentGroup.subject == "Казахский язык") {
-        this.block = "5";
+        this.block = "6";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
-        this.block = "5";
+        this.block = "6";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 30;
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
@@ -1179,32 +1183,42 @@ export default {
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "5";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "5";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 30;
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "5";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
+        this.testMax = 30;
       }
     } else if (this.currentGroup.klass == 4) {
       if (this.currentGroup.subject == "Математика") {
         this.block = "4.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-         this.testMax = 30;
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "4";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "4";
+        this.blocks = ["4", "5", "6"];
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-         this.testMax = 30;
+        this.testMax = 30;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "4.2";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
+        this.testMax = 30;
       }
     }
     this.SelectBlock();
