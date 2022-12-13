@@ -674,6 +674,7 @@ export default new Vuex.Store({
 			}
 	],
 	currentRegister: [],
+	currentRegisterReport: [],
 	adminRegisters: [],
 	adminTests: [],
 	personalTest:{},
@@ -736,6 +737,9 @@ export default new Vuex.Store({
 		},
 		SET_CURRENT_REGISTER(state,register){
 			state.currentRegister = register;
+		},
+		SET_CURRENT_REGISTER_REPORT(state,report){
+			state.currentRegisterReport = report;
 		},
 		SET_ADMIN_REGISTER(state,register){
 			state.adminRegisters = register;
@@ -1011,7 +1015,7 @@ export default new Vuex.Store({
 				var day = today.getFullYear()+'-'+("0" + (today.getMonth()+1)).slice(-2)+'-'+("0" + today.getDate()).slice(-2);
 				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 	
-				var pass_response = await Api().post('/setattendencet',{group: params.group, submitDay: day, submitTime: time, isSubmitted: false, students: params.students,Aibucks: params.Aibucks,topic: params.topic,homework: params.homework,foskres: params.foskres, kolhar: params.kolhar,teacherName: params.teacherName,Block:params.Block, srezMaxDefault: params.srezMaxDefault});
+				var pass_response = await Api().post('/setattendencet',{group: params.group, submitDay: day, submitTime: time, isSubmitted: false, students: params.students,Aibucks: params.Aibucks,topic: params.topic,homework: params.homework,foskres: params.foskres, kolhar: params.kolhar,teacherName: params.teacherName,Block:params.Block, srezMaxDefault: params.srezMaxDefault, bumFlag: params.bumflag});
 
 				if(pass_response.data.status == 200){
 					commit('RESET_GROUP');
@@ -1465,7 +1469,60 @@ export default new Vuex.Store({
 		}catch{
 			commit('RESET_CURRENT_USER');
 		}		
-	}
+	},
+	async GetOfficesHH({commit}){
+		try{
+			var response = await Api().get('/offices');
+			return response.data.data;
+		}catch(err){
+			commit('RESET_CURRENT_USER');
+		}
+	},
+	async TimeCheck({commit}, body){
+		try {
+			let response = await Api().post('/timecheck', body);
+			return response;
+		} catch (error) {
+			commit('RESET_CURRENT_USER');
+		}
+	},
+	async getregisterReport({commit}, body){
+		try {
+			let response = await Api().post('/getregisterReport', body);
+			if(response.data.status == 200){
+				commit('SET_CURRENT_REGISTER',response.data.dataReg);
+				commit('SET_CURRENT_REGISTER_REPORT',response.data.dataRep);
+			}
+			else if(response.data.status == 400 || response.data.status == 401)
+				commit('RESET_CURRENT_USER');
+			else 
+				commit('RESET_CURRENT_USER');
+		} catch (error) {
+			commit('RESET_CURRENT_USER');
+		}
+	},
+	async GetBumRegisterDetails({commit},params){
+		try{
+			var response = await Api().get('/getbumregisterdetails',{params});
+			if(response.data.status == 400 || response.data.status == 401)
+				commit('RESET_CURRENT_USER');
+
+			return response.data;
+		}catch(err){
+			commit('RESET_CURRENT_USER');
+		}
+	},
+	async GetDopRegisterDetails({commit},params){
+		try{
+			var response = await Api().get('/getdopregisterdetails',{params});
+			if(response.data.status == 400 || response.data.status == 401)
+				commit('RESET_CURRENT_USER');
+
+			return response.data;
+		}catch(err){
+			commit('RESET_CURRENT_USER');
+		}
+	},
   },
   modules: {
   }

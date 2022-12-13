@@ -1183,11 +1183,11 @@ export default {
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "5";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "5";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
@@ -1205,11 +1205,11 @@ export default {
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "4";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "4";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
@@ -1226,21 +1226,22 @@ export default {
       !localStorage.groupStudents ||
       JSON.parse(localStorage.groupStudents).length == 0
     ) {
-      this.overlay = true;
-      var response = await this.$store.dispatch("GetStudents", {
-        group: this.currentGroup,
-        teacherId: this.currentTeacher.Id,
-      });
-      this.overlay = false;
-      if (response.status == 200) {
-        this.SortStudent();
-        this.isLoading = false;
-      } else if (response.status == 400 || response.status == 401) {
-        this.messageModal = "Ваше время в системе истекло перезайдите";
-        this.path = "/";
-        this.dialog = true;
+      if (!this.currentGroup.bumflag) {
+        this.overlay = true;
+        var response = await this.$store.dispatch("GetStudents", {
+          group: this.currentGroup,
+          teacherId: this.currentTeacher.Id,
+        });
+        this.overlay = false;
+        if (response.status == 200) {
+          this.SortStudent();
+          this.isLoading = false;
+        } else if (response.status == 400 || response.status == 401) {
+          this.messageModal = "Ваше время в системе истекло перезайдите";
+          this.path = "/";
+          this.dialog = true;
+        }
       }
-
       if (this.currentGroup.change) this.$store.dispatch("ResetEqual", false);
     } else {
       this.SortStudent();
@@ -1305,7 +1306,8 @@ export default {
               homework: this.homework,
               foskres: this.foskres,
               kolhar: this.kolhar,
-              srezMaxDefault: this.srezMaxDefault
+              srezMaxDefault: this.srezMaxDefault,
+              bumflag: this.currentGroup.bumflag
             });
             console.log(response);
             this.overlay = false;

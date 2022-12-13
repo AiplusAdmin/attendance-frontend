@@ -95,7 +95,7 @@
             </v-select>
           </template>
           <template v-slot:[`item.Online`]="{ item }">
-            <td v-if="item.Online == true">
+            <td v-if="(item.Source == 'Registers' && item.Online == true) || item.Source == 'DopRegisters'">
               Онлайн
             </td>
             <td v-else>
@@ -361,7 +361,7 @@ export default {
         SubFullName: [],
         Online: [],
       },
-      expandheaders: [
+      regexpandheaders: [
         {
           text: "ID",
           value: "ClientId",
@@ -404,13 +404,50 @@ export default {
           sortable: false,
           divider: true,
         },
+      ],
+      dopexpandheaders: [
+        {
+          text: "ID",
+          value: "ClientId",
+          sortable: false,
+        },
+        {
+          text: "ФИО студента",
+          value: "FullName",
+          sortable: false,
+        },
+        {
+          text: "Присутвовал",
+          value: "Pass",
+          sortable: false,
+        },
+        {
+          text: "Задачи",
+          value: "task",
+          sortable: false,
+        },
+        {
+          text: "Задачи Максимум",
+          value: "taskmax",
+          sortable: false,
+        },
+        {
+          text: "Закрытия темы",
+          value: "complition",
+          sortable: false,
+        },
+        {
+          text: "Комментарии",
+          value: "Comment",
+          sortable: false,
+        },
         {
           text: "Айбаксы",
           value: "Aibucks",
           sortable: false,
-          divider: true,
         },
       ],
+      expandheaders: [],
       search: "",
       expanded: [],
       expandedStudents: [],
@@ -478,9 +515,23 @@ export default {
     },
     async ShowMore(value) {
       if (value.value) {
-        var response = await this.$store.dispatch("GetRegisterDetails", {
-          registerId: value.item.Id,
-        });
+        var response = null;
+        if(value.item.Source == 'Registers'){
+          this.expandheaders = this.regexpandheaders;
+          response = await this.$store.dispatch("GetRegisterDetails", {
+            registerId: value.item.Id
+          });
+        }else if(value.item.Source == 'BumRegisters'){
+          this.expandheaders = this.regexpandheaders;
+          response = await this.$store.dispatch("GetBumRegisterDetails", {
+            registerId: value.item.Id
+          });
+        }else if(value.item.Source == 'DopRegisters'){
+          this.expandheaders = this.dopexpandheaders;
+          response = await this.$store.dispatch("GetDopRegisterDetails", {
+            registerId: value.item.Id
+          });
+        }
         if (response.status == 200) {
           this.expandedStudents = response.data;
         } else {

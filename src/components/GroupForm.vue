@@ -68,6 +68,7 @@
           height="50"
           >Замена</v-btn
         >
+        <SheetAttendance :teacherId="teacherId" />
       </v-col>
     </v-row>
     <Loading :overlay="overlay" />
@@ -76,11 +77,13 @@
 
 <script>
 import Loading from "@/components/modal/Loading";
+import SheetAttendance from "@/components/modal/SheetAttendance";
 
 export default {
   name: "GroupForm",
   components: {
     Loading,
+    SheetAttendance,
   },
   props: {
     teacherId: String,
