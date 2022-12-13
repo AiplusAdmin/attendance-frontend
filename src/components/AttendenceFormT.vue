@@ -1161,11 +1161,11 @@ export default {
         this.testMax = 40;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "6";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];;
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "6";
-        this.blocks = ["4", "5", "6"];
+        this.blocks = ["4-5", "6"];;
         this.testMax = 30;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
