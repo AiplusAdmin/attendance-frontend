@@ -467,7 +467,7 @@
                 item-color="#fbab17"
                 :rules="[
                   requiredNumber('Срез', !item.delete),
-                  numberBetween('Срез', !item.delete),
+                  numberBetweenTest('Срез', !item.delete,srezMaxDefault),
                 ]"
                 required
               >
@@ -802,7 +802,7 @@
                           item-color="#fbab17"
                           :rules="[
                             requiredNumber('Срез', !student.delete),
-                            numberBetween('Срез', !student.delete),
+                            numberBetweenTest('Срез', !student.delete,srezMaxDefault)
                           ]"
                           required
                         >
