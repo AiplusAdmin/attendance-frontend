@@ -377,7 +377,7 @@
                 ></v-switch>
               </v-toolbar>
               <v-toolbar flat>
-                <v-toolbar-title>Воскресный тест</v-toolbar-title>
+                <v-toolbar-title>Блочный тест</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-switch
                   v-model="foskres"
@@ -440,20 +440,21 @@
               </v-text-field>
             </template>
             <template v-slot:[`item.foskres`]="{ item }">
-              <v-text-field
+              <v-select
                 v-model="item.foskres"
-                v-show="item.attendence && foskres && !item.delete"
-                type="number"
-                :disabled="!item.attendence"
-                min="0"
-                max="100"
+                v-show="foskres && !item.delete"
+                :items="blockTests"
+                item-text="text"
+                item-value="value"
                 color="#fbab17"
+                hide-selected
+                item-color="#fbab17"
                 :rules="[
-                  requiredNumber('воскрес', item.attendence && foskres && !item.delete),
-                  numberBetween('воскрес', item.attendence && foskres && !item.delete),
-                ]"
-                required>
-              </v-text-field>
+                  requiredNumber('воскрес',foskres && !item.delete)
+                  ]"
+                required
+              >
+              </v-select>
             </template>
             <template v-slot:[`item.test`]="{ item }">
               <v-text-field
@@ -732,7 +733,7 @@
                           :rules="[
                             requiredNumber(
                               'Блочный тест',
-                              student.attendence && foskres
+                              !student.delete && foskres
                             ),
                           ]"
                           required
@@ -1090,7 +1091,11 @@ export default {
       return this.$store.state.subTeacher;
     },
     homeworks() {
-      return this.$store.state.homeworks;
+      if(this.kolhar){
+        return this.$store.state.homeworksKolHar;
+      }else{
+        return this.$store.state.homeworks;
+      }
     },
     tests() {
       return this.$store.state.tests;
@@ -1158,67 +1163,67 @@ export default {
       if (this.currentGroup.subject == "Математика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 40;
+        this.testMax = 41;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "6";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "6";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "6.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 40;
+        this.testMax = 41;
       }
     }else if (this.currentGroup.klass == 5) {
       if (this.currentGroup.subject == "Математика") {
         this.block = "5";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "5";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "5";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "5";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 31;
       }
     } else if (this.currentGroup.klass == 4) {
       if (this.currentGroup.subject == "Математика") {
         this.block = "4.1";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Казахский язык") {
         this.block = "4";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Русский язык") {
         this.block = "4";
         this.blocks = ["4-5", "6"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Английский язык") {
         this.block = "1";
         this.blocks = ["1", "2", "3", "4"];
-        this.testMax = 30;
+        this.testMax = 31;
       } else if (this.currentGroup.subject == "Логика") {
         this.block = "4.2";
         this.blocks = ["4.1", "4.2", "5", "5.1", "5.2", "6.1", "6.2"];
-        this.testMax = 30;
+        this.testMax = 31;
       }
     }
     this.SelectBlock();
