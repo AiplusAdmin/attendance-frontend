@@ -328,6 +328,7 @@
                     <v-select
                       v-model="srezMaxDefault"
                       :items="srezMax"
+                      @change="SelectSrezMax"
                       color="#fbab17"
                       flat
                       dense
@@ -457,21 +458,19 @@
               </v-select>
             </template>
             <template v-slot:[`item.test`]="{ item }">
-              <v-text-field
+              <v-select
                 v-model="item.test"
                 v-show="!item.delete"
-                type="number"
-                min="0"
-                max="102"
+                :items="srezTests"
+                item-text="text"
+                item-value="value"
                 color="#fbab17"
                 item-color="#fbab17"
-                :rules="[
-                  requiredNumber('Срез', !item.delete),
-                  numberBetweenTest('Срез', !item.delete,srezMaxDefault),
-                ]"
+                hide-selected
+                :rules="[ requiredNumber('Срез', !item.delete)]"
                 required
               >
-              </v-text-field>
+              </v-select>
             </template>
             <template v-slot:[`item.lesson`]="{ item }">
               <v-text-field
@@ -784,29 +783,27 @@
                   inactive
                 >
                   <v-row class="align-center">
-                    <v-col cols="9" class="py-0">
+                    <v-col cols="7" class="py-0">
                       <v-list-item-content>
                         <v-list-item-title class="grey--text text--darken-3"
                           >Срез</v-list-item-title
                         >
                       </v-list-item-content>
                     </v-col>
-                    <v-col cols="3" class="pa-0">
-                      <v-list-item-action class="mr-2">
-                        <v-text-field
+                    <v-col cols="5" class="pa-0">
+                      <v-list-item-action class="mr-7">
+                        <v-select
                           v-model="student.test"
-                          type="number"
-                          min="0"
-                          max="102"
+                          :items="srezTests"
+                          item-text="text"
+                          item-value="value"
                           color="#fbab17"
                           item-color="#fbab17"
-                          :rules="[
-                            requiredNumber('Срез', !student.delete),
-                            numberBetweenTest('Срез', !student.delete,srezMaxDefault)
-                          ]"
+                          hide-selected
+                          :rules="[ requiredNumber('Срез', !student.delete)]"
                           required
                         >
-                        </v-text-field>
+                        </v-select>
                       </v-list-item-action>
                     </v-col>
                   </v-row>
@@ -1078,6 +1075,7 @@ export default {
       srezMax: ["10","20","30","40","50","60","70","80","90","100"],
       srezMaxDefault : null,
       blockTests: [],
+      srezTests: [],
     };
   },
   computed: {
@@ -1412,6 +1410,19 @@ export default {
         level: level,
       });
     },
+    SelectSrezMax(){
+      this.srezTests = [];
+      for (var i = 0; i <= this.srezMaxDefault; i++) {
+          this.srezTests.push({
+            text: "" + i,
+            value: i,
+          });
+      }
+      this.srezTests.push({
+        text: "Не писал",
+        value: 102,
+      });
+    },
     SelectBlock() {
       this.topic = null;
       this.topicName = null;
@@ -1464,11 +1475,21 @@ export default {
     },
     srez: function(val) {
       if (val) {
+        if(this.srezTests.length == 0){
+          this.srezTests.push({
+            text: "Не писал",
+            value: 102,
+          });
+        }
         this.groupStudents.map(function(student) {
           student.test = 102;
         });
         this.srezMaxDefault = null;
       } else {
+        if(this.srezTests.length == 1){
+          this.srezTests = [];
+        }
+
         this.groupStudents.map(function(student) {
           student.test = null;
         });

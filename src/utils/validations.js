@@ -12,7 +12,8 @@ var requiredTheme = (propertyType,theme) => {
 
 var requiredNumber = (propertyType,ok) => {
 	if(!ok) return true;
-	return v => !isNaN(v) || `Заполните объязательное поле ${propertyType}`;
+
+	return v => !isNaN(v) && v != null || `Заполните объязательное поле ${propertyType}`;
 }
 
 var minLength = (propertyType, minLength) => {
@@ -35,7 +36,7 @@ var numberBetween = (propertyType, ok) => {
 
 var numberBetweenTest = (propertyType,ok, max) => {
 	if(!ok) return true;
-	return  v => v && v >= 0 && v <= max || `${propertyType} должна быть между 0 и ${max}`;
+	return  v => v && ((v >= 0 && v <= max) || v == 102)  || `${propertyType} должна быть между 0 и ${max}`;
 }
 export default {
 	required,
